@@ -27,16 +27,16 @@ N = 20
 h = T/N
 sqrth = np.sqrt(h)
 n_maxstep = 500
-n_displaystep = 100
+n_displaystep = 10
 n_neuronForA = [d,d,d,d]
 n_neuronForGamma = [d,d,d,d**2]
 Xinit = np.array ([1.0 ,0.5]*50 )
 mu = 0
-sigma = 0.4
-sigma_min = 0.03
-sigma_max = 0.25
+sigma = 0.15
+sigma_min = 0.09
+sigma_max = 0.15
 #r = 0.05
-r=0.5
+r = 0.09
 
 _extra_train_ops = []
 
@@ -102,15 +102,15 @@ def _batch_norm(x, name):
         return y
 
 
-def train_nn(data):
+def train_nn():
     with tf.Session() as sess:
         dW = tf.random_normal(shape=[batch_size , d], stddev = 1, dtype=tf.float64)
         X = tf.Variable(np.ones([batch_size, d]) * Xinit, dtype=tf.float64, trainable=False)
-        #Y0 = tf.Variable(tf.random_uniform([1], minval=0, maxval=1, dtype=tf.float64), name='Y0')
-        Y0 = tf.convert_to_tensor(data)
+        Y0 = tf.Variable(tf.random_uniform([1], minval=0, maxval=1, dtype=tf.float64), name='Y0')
+        # Y0 = tf.convert_to_tensor(data)
         Z0 = tf.Variable(tf.random_uniform([1, d], minval=-.1, maxval=.1, dtype=tf.float64), name='Z0')
         Gamma0 = tf.Variable(tf.random_uniform([d, d], minval=-1, maxval=1, dtype=tf.float64), name='Gamma0')
-        Gamma0 = tf.convert_to_tensor(data)
+        #Gamma0 = tf.convert_to_tensor(data)
         A0 = tf.Variable(tf.random_uniform([1, d], minval=-.1, maxval=.1, dtype=tf.float64), name='A0')
         allones = tf.ones(shape=[batch_size , 1], dtype=tf.float64, name='MatrixOfOnes')
         Y=allones*Y0
