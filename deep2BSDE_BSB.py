@@ -9,7 +9,7 @@ second-order backward stochastic differential equations
 E, Han, & Jentzen
 2017
 
-Modified by Tim Burt
+Modified by Tim Burt 2/5/2018
 """
 
 import time, datetime
@@ -20,22 +20,21 @@ from tensorflow.python.training import moving_averages
 start_time = time.time()
 tf.reset_default_graph()
 name = 'BSB'
-d = 100
+d = 30
 batch_size = 64
 T = 1.0
 N = 20
 h = T/N
 sqrth = np.sqrt(h)
 n_maxstep = 500
-n_displaystep = 10
+n_displaystep = 50
 n_neuronForA = [d,d,d,d]
 n_neuronForGamma = [d,d,d,d**2]
-Xinit = np.array ([1.0 ,0.5]*50 )
+Xinit = np.array([1.0, 0.5] * (int(d / 2)))
 mu = 0
-sigma = 0.15
+sigma = 0.41
 sigma_min = 0.09
-sigma_max = 0.15
-#r = 0.05
+sigma_max = 0.41
 r = 0.09
 
 _extra_train_ops = []
@@ -102,7 +101,7 @@ def _batch_norm(x, name):
         return y
 
 
-def train_nn():
+def train_nn():  # r, sigma, simga_max, sigma_min):
     with tf.Session() as sess:
         dW = tf.random_normal(shape=[batch_size , d], stddev = 1, dtype=tf.float64)
         X = tf.Variable(np.ones([batch_size, d]) * Xinit, dtype=tf.float64, trainable=False)
@@ -183,5 +182,5 @@ def train_nn():
     output [:,2] = y0_values
     output [:,3] = learning_rates
     output [:,4] = running_time
-    np.savetxt("./" + str(name) + "_d" + str(d) + "_" + datetime.datetime.now(). strftime('%Y-%m-%d-%H:%M:%S') + ".csv",
+    np.savetxt("Data" + str(name) + "_d" + str(d) + "_" + datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S') + ".csv",
                output ,delimiter = ",", header = "step , loss function , Y0 , learning rate , running time" )
